@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 import os
 
@@ -15,12 +14,7 @@ def pre_processing(df: pd.DataFrame):
     df["ExerciseAngina"] = df["ExerciseAngina"].replace({"N":0,"Y":1})
     df["ST_Slope"] = df["ST_Slope"].replace({"Flat":0,"Up":1,"Down":2})
     
-    X = df.drop(columns=["HeartDisease"], axis=1)
-    y = df["HeartDisease"]
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.2)
-
-    return [X_train, X_test, y_train, y_test] 
+    return df
 
 def save_data(df, path):
     dir_path = os.path.dirname(path)
@@ -32,16 +26,12 @@ def save_data(df, path):
     df.to_csv(path, index=False)    
 
 data_path = r"./data/raw/heart.csv"
-x_train_file_path = r"./data/preprocessed/X_train.csv"
-x_test_file_path = r"./data/preprocessed/X_test.csv"
-y_train_file_path = r"./data/preprocessed/y_train.csv"
-y_test_file_path = r"./data/preprocessed/y_test.csv"
+save_file_path = r"./data/preprocessed/processed.csv"
+
 def main():
     df = load_data(data_path)
     X_train, X_test, y_train, y_test = pre_processing(df)
-    save_data(X_train, x_train_file_path)
-    save_data(X_test, x_test_file_path)
-    save_data(y_train, y_train_file_path)
-    save_data(y_test, y_test_file_path)
+    save_data(df, save_file_path)
+    
 if __name__ == "__main__":
     main()
