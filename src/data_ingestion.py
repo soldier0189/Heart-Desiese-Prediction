@@ -16,7 +16,7 @@ def save_data(df, path):
 
 def main():
     file_path = r"./Notebook/heart.csv"
-    save_path = r"./data/raw.heart.csv"
+    save_path = r"./data/raw/heart.csv"
     df = load_data(file_path)
     save_data(df, save_path)
 

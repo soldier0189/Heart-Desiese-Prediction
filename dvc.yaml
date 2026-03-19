@@ -1,0 +1,52 @@
+stages:
+  
+  data_ingestion:
+    cmd: python src/data_ingestion.py
+    deps:
+      - ./Notebook/heart.csv
+      - ./src/data_ingestion.py
+    outs:
+      - ./data/raw/heart.csv  
+
+  data_preprocessing:
+    cmd: python src/data_preprocessing.py
+    deps:
+      - ./data/raw/heart.csv
+      - ./src/data_preprocessing.py
+    outs:
+      - ./data/preprocessed/processed.csv
+
+  feature_engineering:
+    cmd: python src/feature_engineering.py
+    deps:
+      - ./data/preprocessed/processed.csv
+      - ./src/feature_engineering.py
+    outs:
+      - ./data/splited_data/x_train.csv
+      - ./data/splited_data/x_test.csv
+      - ./data/splited_data/y_train.csv
+      - ./data/splited_data/y_test.csv
+
+  model_building:
+    cmd: python src/model_building.py
+    deps:
+      - ./data/splited_data/x_train.csv
+      - ./data/splited_data/x_test.csv
+      - ./data/splited_data/y_train.csv
+      - ./data/splited_data/y_test.csv
+      - ./src/model_building.py
+      - params.yaml
+    params:
+      - random_forest.n_estimators
+      - random_forest.max_depth
+      - random_forest.random_state
+    outs:
+      - ./artifacts/model.pkl
+
+  model_eval:
+    cmd: python src/model_eval.py
+    deps:
+      - ./artifacts/model.pkl
+      - ./data/splited_data/x_test.csv
+      - ./data/splited_data/y_test.csv
+      - ./src/model_eval.py

@@ -30,7 +30,7 @@ save_file_path = r"./data/preprocessed/processed.csv"
 
 def main():
     df = load_data(data_path)
-    X_train, X_test, y_train, y_test = pre_processing(df)
+    df = pre_processing(df)
     save_data(df, save_file_path)
     
 if __name__ == "__main__":
